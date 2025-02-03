@@ -95,3 +95,26 @@ footer {
   font-size: 0.9em;
   color: #7f8c8d;
 }
+
+/* Basic styling for tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+table, th, td {
+  border: 1px solid black;
+}
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f4f4f4;
+}
+.results-container {
+  margin-top: 20px;
+}
+.form-group {
+  margin-bottom: 15px;
+}

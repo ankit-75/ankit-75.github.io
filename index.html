@@ -74,7 +74,7 @@
       </div>
 
       <!-- Results Section -->
-      <div id="result">
+      <div class="results-container">
         <h2>Tax Comparison</h2>
         <p><strong>Old Regime Tax:</strong> ₹<span id="oldTax">0</span></p>
         <p><strong>New Regime Tax:</strong> ₹<span id="newTax">0</span></p>
@@ -84,17 +84,42 @@
         <!-- Breakdown of the calculation -->
         <div id="taxBreakdown">
           <h3>Tax Calculation Breakdown</h3>
-          <ul id="breakdownList"></ul>
+          
+          <!-- Old Regime Tax Breakdown -->
+          <h4>Old Regime Tax Slabs</h4>
+          <table id="oldRegimeTable">
+            <thead>
+              <tr>
+                <th>Slab</th>
+                <th>Taxable Income (₹)</th>
+                <th>Tax Rate</th>
+                <th>Calculated Tax (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="oldRegimeBreakdown"></tbody>
+          </table>
+          
+          <!-- New Regime Tax Breakdown -->
+          <h4>New Regime Tax Slabs</h4>
+          <table id="newRegimeTable">
+            <thead>
+              <tr>
+                <th>Slab</th>
+                <th>Taxable Income (₹)</th>
+                <th>Tax Rate</th>
+                <th>Calculated Tax (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="newRegimeBreakdown"></tbody>
+          </table>
         </div>
       </div>
-
     </main>
 
     <footer>
       <p>Disclaimer: This is an estimate based on current tax laws.</p>
     </footer>
   </div>
-
   <script src="scripts.js"></script>
 </body>
 </html>
