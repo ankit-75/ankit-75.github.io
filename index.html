@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Income Tax Calculator - India</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>India Income Tax Calculator</h1>
+      <p>Compare tax under Old vs. New Regime</p>
+    </header>
+
+    <main>
+      <div class="tax-sections">
+        <!-- Left Section (Old Tax Regime) -->
+        <section class="tax-regime old-regime">
+          <h2>Old Tax Regime</h2>
+          <form id="oldTaxForm">
+            <div class="form-group">
+              <label for="income">Annual Income (₹):</label>
+              <input type="number" id="income" name="income" required>
+            </div>
+            <div class="form-group">
+              <label for="deduction80c">Deduction 80C (₹):</label>
+              <input type="number" id="deduction80c" name="deduction80c" value="0">
+            </div>
+            <div class="form-group">
+              <label for="deductionNPS">NPS Deduction (₹):</label>
+              <input type="number" id="deductionNPS" name="deductionNPS" value="0">
+            </div>
+            <div class="form-group">
+              <label for="deductionHealth">Health Insurance Deduction (₹):</label>
+              <input type="number" id="deductionHealth" name="deductionHealth" value="0">
+            </div>
+            <div class="form-group">
+              <label for="deductionHRA">HRA Deduction (₹):</label>
+              <input type="number" id="deductionHRA" name="deductionHRA" value="0">
+            </div>
+            <button type="button" onclick="calculateTax()">Calculate Tax</button>
+          </form>
+        </section>
+
+        <!-- Right Section (New Tax Regime) -->
+        <section class="tax-regime new-regime">
+          <h2>New Tax Regime</h2>
+          <form id="newTaxForm">
+            <div class="form-group">
+              <label for="incomeNew">Annual Income (₹):</label>
+              <input type="number" id="incomeNew" name="incomeNew" required>
+            </div>
+            <button type="button" onclick="calculateTax()">Calculate Tax</button>
+          </form>
+        </section>
+      </div>
+
+      <!-- Results Section -->
+      <div id="result">
+      
+        <h2>Tax Comparison</h2>
+        <p><strong>Old Regime Tax:</strong> ₹<span id="oldTax">0</span></p>
+        <p><strong>New Regime Tax:</strong> ₹<span id="newTax">0</span></p>
+        <p id="savings" style="color: green; font-weight: bold;"></p>
+      </div>
+
+    </main>
+
+    <footer>
+      <p>Disclaimer: This is an estimate based on current tax laws.</p>
+    </footer>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
