@@ -39,7 +39,23 @@
               <label for="deductionHRA">HRA Deduction (₹):</label>
               <input type="number" id="deductionHRA" name="deductionHRA" value="0">
             </div>
-            <button type="button" onclick="calculateTax()">Calculate Tax</button>
+          </form>
+
+          <!-- New HRA Calculation Section -->
+          <h3>HRA Calculation</h3>
+          <form id="hraForm">
+            <div class="form-group">
+              <label for="basicSalary">Basic Salary (₹):</label>
+              <input type="number" id="basicSalary" name="basicSalary" value="0">
+            </div>
+            <div class="form-group">
+              <label for="hraPaid">HRA Paid (₹):</label>
+              <input type="number" id="hraPaid" name="hraPaid" value="0">
+            </div>
+            <div class="form-group">
+              <label for="rentPaid">Rent Paid (₹):</label>
+              <input type="number" id="rentPaid" name="rentPaid" value="0">
+            </div>
           </form>
         </section>
 
@@ -58,11 +74,11 @@
 
       <!-- Results Section -->
       <div id="result">
-      
         <h2>Tax Comparison</h2>
         <p><strong>Old Regime Tax:</strong> ₹<span id="oldTax">0</span></p>
         <p><strong>New Regime Tax:</strong> ₹<span id="newTax">0</span></p>
         <p id="savings" style="color: green; font-weight: bold;"></p>
+        <p id="hraExemption" style="color: blue; font-weight: bold;"></p>
       </div>
 
     </main>
