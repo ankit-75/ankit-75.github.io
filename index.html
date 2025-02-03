@@ -21,24 +21,25 @@
           <form id="oldTaxForm">
             <div class="form-group">
               <label for="income">Annual Income (₹):</label>
-              <input type="number" id="income" name="income" required>
+              <input type="number" id="income" name="income" value="800000" required>
             </div>
             <div class="form-group">
               <label for="deduction80c">Deduction 80C (₹):</label>
-              <input type="number" id="deduction80c" name="deduction80c" value="0">
+              <input type="number" id="deduction80c" name="deduction80c" value="150000">
             </div>
             <div class="form-group">
               <label for="deductionNPS">NPS Deduction (₹):</label>
-              <input type="number" id="deductionNPS" name="deductionNPS" value="0">
+              <input type="number" id="deductionNPS" name="deductionNPS" value="50000">
             </div>
             <div class="form-group">
               <label for="deductionHealth">Health Insurance Deduction (₹):</label>
-              <input type="number" id="deductionHealth" name="deductionHealth" value="0">
+              <input type="number" id="deductionHealth" name="deductionHealth" value="25000">
             </div>
             <div class="form-group">
               <label for="deductionHRA">HRA Deduction (₹):</label>
-              <input type="number" id="deductionHRA" name="deductionHRA" value="0">
+              <input type="number" id="deductionHRA" name="deductionHRA" value="200000">
             </div>
+            <button type="button" onclick="calculateTax()">Calculate Tax</button>
           </form>
 
           <!-- New HRA Calculation Section -->
@@ -65,7 +66,7 @@
           <form id="newTaxForm">
             <div class="form-group">
               <label for="incomeNew">Annual Income (₹):</label>
-              <input type="number" id="incomeNew" name="incomeNew" required>
+              <input type="number" id="incomeNew" name="incomeNew" value="800000" required>
             </div>
             <button type="button" onclick="calculateTax()">Calculate Tax</button>
           </form>
@@ -79,6 +80,12 @@
         <p><strong>New Regime Tax:</strong> ₹<span id="newTax">0</span></p>
         <p id="savings" style="color: green; font-weight: bold;"></p>
         <p id="hraExemption" style="color: blue; font-weight: bold;"></p>
+
+        <!-- Breakdown of the calculation -->
+        <div id="taxBreakdown">
+          <h3>Tax Calculation Breakdown</h3>
+          <ul id="breakdownList"></ul>
+        </div>
       </div>
 
     </main>
