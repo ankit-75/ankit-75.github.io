@@ -9,7 +9,7 @@ function calculateOldRegimeTax(income, deductions = 0, hraExemption = 0) {
   let taxableIncome = income - deductions - hraExemption;
   let tax = 0;
   let breakdown = [];
-
+  let taxRebate = 0;
   // Tax Slabs for Old Regime
   if (taxableIncome <= 250000) {
     tax = 0;
@@ -31,52 +31,125 @@ function calculateOldRegimeTax(income, deductions = 0, hraExemption = 0) {
     breakdown.push({ slab: '₹10 L and above', taxableIncome: taxableIncome - 1000000, rate: '30%', tax: `₹${((taxableIncome - 1000000) * 0.3).toFixed(2)}` });
   }
 
-  return { tax, breakdown };
+  if(taxableIncome <= 500000){
+    if(tax <= 12500){
+      taxRebate = tax;
+    }
+  }
+  return { tax, breakdown, taxableIncome, taxRebate };
 }
 
 // Function to calculate the tax for New Regime
 function calculateNewRegimeTax(income) {
+  let taxableIncome = income - 75000;
+  let tax = 0;
+  let breakdown = [];
+  let taxRebate = 0;
+  // Tax Slabs for New Regime
+  if (taxableIncome <= 300000) {
+    tax = 0;
+    breakdown.push({ slab: '₹0 – ₹3 L', taxableIncome: taxableIncome, rate: '0%', tax: '₹0' });
+  } else if (taxableIncome <= 700000) {
+    let slabTax = (taxableIncome - 300000) * 0.05;
+    tax = slabTax;
+    breakdown.push({ slab: '₹3 L – ₹7 L', taxableIncome: taxableIncome - 300000, rate: '5%', tax: `₹${slabTax.toFixed(2)}` });
+  } else if (taxableIncome <= 1000000) {
+    let slabTax = 400000 * 0.05 + (taxableIncome - 700000) * 0.1;
+    tax = slabTax;
+    breakdown.push({ slab: '₹3 L – ₹7 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
+    breakdown.push({ slab: '₹7 L – ₹10 L', taxableIncome: taxableIncome - 700000, rate: '10%', tax: `₹${((taxableIncome - 700000) * 0.1).toFixed(2)}` });
+  } else if (taxableIncome <= 1200000) {
+    let slabTax = 400000 * 0.05 + 300000 * 0.1 + (taxableIncome - 1000000) * 0.15;
+    tax = slabTax;
+    breakdown.push({ slab: '₹3 L – ₹7 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
+    breakdown.push({ slab: '₹7 L – ₹10 L', taxableIncome: 300000, rate: '10%', tax: '₹30000' });
+    breakdown.push({ slab: '₹10 L – ₹12 L', taxableIncome: taxableIncome - 1000000, rate: '15%', tax: `₹${((taxableIncome - 1000000) * 0.15).toFixed(2)}` });
+  } else if (taxableIncome <= 150000) {
+    let slabTax = 400000 * 0.05 + 300000 * 0.1 + 200000 * 0.15 + (taxableIncome - 1200000) * 0.2;
+    tax = slabTax;
+    breakdown.push({ slab: '₹3 L – ₹7 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
+    breakdown.push({ slab: '₹7 L – ₹10 L', taxableIncome: 300000, rate: '10%', tax: '₹30000' });
+    breakdown.push({ slab: '₹10 L – ₹12 L', taxableIncome: 200000, rate: '15%', tax: '₹30000' });
+    breakdown.push({ slab: '₹12 L – ₹15 L', taxableIncome: taxableIncome - 1200000, rate: '20%', tax: `₹${((taxableIncome - 1200000) * 0.2).toFixed(2)}` });
+  } else {
+    let slabTax = 400000 * 0.05 + 300000 * 0.1 + 200000 * 0.15 + 300000 * 0.2 + (taxableIncome - 1500000) * 0.3;
+    tax = slabTax;
+    breakdown.push({ slab: '₹3 L – ₹7 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
+    breakdown.push({ slab: '₹7 L – ₹10 L', taxableIncome: 300000, rate: '10%', tax: '₹30000' });
+    breakdown.push({ slab: '₹10 L – ₹12 L', taxableIncome: 200000, rate: '15%', tax: '₹30000' });
+    breakdown.push({ slab: '₹12 L – ₹15 L', taxableIncome: 300000, rate: '20%', tax: '₹60000' });
+    breakdown.push({ slab: '₹15 L and above', taxableIncome: taxableIncome - 1500000, rate: '30%', tax: `₹${((taxableIncome - 1500000) * 0.3).toFixed(2)}` });
+  }
+
+  if(taxableIncome <= 700000){
+    if(tax <= 25000){
+      taxRebate = tax;
+    }
+  }
+
+  return { tax, breakdown, taxableIncome, taxRebate };
+}
+
+// Function to calculate the tax for New Regime
+function calculateNewRegimeTax2025_26(income) {
   let taxableIncome = income;
   let tax = 0;
   let breakdown = [];
-
+  let taxRebate = 0;
   // Tax Slabs for New Regime
-  if (taxableIncome <= 250000) {
+  if (taxableIncome <= 400000) {
     tax = 0;
-    breakdown.push({ slab: '₹0 – ₹2.5 L', taxableIncome: taxableIncome, rate: '0%', tax: '₹0' });
-  } else if (taxableIncome <= 500000) {
-    let slabTax = (taxableIncome - 250000) * 0.05;
+    breakdown.push({ slab: '₹0 – ₹4 L', taxableIncome: taxableIncome, rate: '0%', tax: '₹0' });
+  } else if (taxableIncome <= 800000) {
+    let slabTax = (taxableIncome - 400000) * 0.05;
     tax = slabTax;
-    breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: taxableIncome - 250000, rate: '5%', tax: `₹${slabTax.toFixed(2)}` });
-  } else if (taxableIncome <= 750000) {
-    let slabTax = 250000 * 0.05 + (taxableIncome - 500000) * 0.1;
+    breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: taxableIncome - 400000, rate: '5%', tax: `₹${slabTax.toFixed(2)}` });
+  } else if (taxableIncome <= 120000) {
+    let slabTax = 400000 * 0.05 + (taxableIncome - 800000) * 0.1;
     tax = slabTax;
-    breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: 250000, rate: '5%', tax: '₹12500' });
-    breakdown.push({ slab: '₹5 L – ₹7.5 L', taxableIncome: taxableIncome - 500000, rate: '10%', tax: `₹${((taxableIncome - 500000) * 0.1).toFixed(2)}` });
-  } else if (taxableIncome <= 1000000) {
-    let slabTax = 250000 * 0.05 + 250000 * 0.1 + (taxableIncome - 750000) * 0.15;
+    breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
+    breakdown.push({ slab: '₹8 L – ₹12 L', taxableIncome: taxableIncome - 800000, rate: '10%', tax: `₹${((taxableIncome - 800000) * 0.1).toFixed(2)}` });
+  } else if (taxableIncome <= 1600000) {
+    let slabTax = 400000 * 0.05 + 400000 * 0.1 + (taxableIncome - 1200000) * 0.15;
     tax = slabTax;
-    breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: 250000, rate: '5%', tax: '₹12500' });
-    breakdown.push({ slab: '₹5 L – ₹7.5 L', taxableIncome: 250000, rate: '10%', tax: '₹25000' });
-    breakdown.push({ slab: '₹7.5 L – ₹10 L', taxableIncome: taxableIncome - 750000, rate: '15%', tax: `₹${((taxableIncome - 750000) * 0.15).toFixed(2)}` });
-  } else if (taxableIncome <= 1250000) {
-    let slabTax = 250000 * 0.05 + 250000 * 0.1 + 250000 * 0.15 + (taxableIncome - 1000000) * 0.2;
+    breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
+    breakdown.push({ slab: '₹8 L – ₹12 L', taxableIncome: 400000, rate: '10%', tax: '₹40000' });
+    breakdown.push({ slab: '₹12 L – ₹16 L', taxableIncome: taxableIncome - 1200000, rate: '15%', tax: `₹${((taxableIncome - 1200000) * 0.15).toFixed(2)}` });
+  } else if (taxableIncome <= 200000) {
+    let slabTax = 400000 * 0.05 + 400000 * 0.1 + 400000 * 0.15 + (taxableIncome - 1600000) * 0.2;
     tax = slabTax;
-    breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: 250000, rate: '5%', tax: '₹12500' });
-    breakdown.push({ slab: '₹5 L – ₹7.5 L', taxableIncome: 250000, rate: '10%', tax: '₹25000' });
-    breakdown.push({ slab: '₹7.5 L – ₹10 L', taxableIncome: 250000, rate: '15%', tax: '₹37500' });
-    breakdown.push({ slab: '₹10 L – ₹12.5 L', taxableIncome: taxableIncome - 1000000, rate: '20%', tax: `₹${((taxableIncome - 1000000) * 0.2).toFixed(2)}` });
-  } else {
-    let slabTax = 250000 * 0.05 + 250000 * 0.1 + 250000 * 0.15 + 250000 * 0.2 + (taxableIncome - 1250000) * 0.25;
+    breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
+    breakdown.push({ slab: '₹8 L – ₹12 L', taxableIncome: 400000, rate: '10%', tax: '₹40000' });
+    breakdown.push({ slab: '₹12 L – ₹16 L', taxableIncome: 400000, rate: '15%', tax: '₹60000' });
+    breakdown.push({ slab: '₹10 L – ₹12.5 L', taxableIncome: taxableIncome - 1600000, rate: '20%', tax: `₹${((taxableIncome - 1600000) * 0.2).toFixed(2)}` });
+  } else if (taxableIncome <= 240000){
+    let slabTax = 400000 * 0.05 + 400000 * 0.1 + 400000 * 0.15 + 400000 * 0.2 + (taxableIncome - 200000) * 0.25;
     tax = slabTax;
-    breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: 250000, rate: '5%', tax: '₹12500' });
-    breakdown.push({ slab: '₹5 L – ₹7.5 L', taxableIncome: 250000, rate: '10%', tax: '₹25000' });
-    breakdown.push({ slab: '₹7.5 L – ₹10 L', taxableIncome: 250000, rate: '15%', tax: '₹37500' });
-    breakdown.push({ slab: '₹10 L – ₹12.5 L', taxableIncome: 250000, rate: '20%', tax: '₹50000' });
-    breakdown.push({ slab: '₹12.5 L and above', taxableIncome: taxableIncome - 1250000, rate: '25%', tax: `₹${((taxableIncome - 1250000) * 0.25).toFixed(2)}` });
+    breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
+    breakdown.push({ slab: '₹8 L – ₹12 L', taxableIncome: 400000, rate: '10%', tax: '₹40000' });
+    breakdown.push({ slab: '₹12 L – ₹16 L', taxableIncome: 400000, rate: '15%', tax: '₹60000' });
+    breakdown.push({ slab: '₹16 L – ₹20 L', taxableIncome: 400000, rate: '20%', tax: '₹80000' });
+    breakdown.push({ slab: '₹20 L – ₹24 L', taxableIncome: taxableIncome - 2000000, rate: '25%', tax: `₹${((taxableIncome - 2000000) * 0.25).toFixed(2)}` });
   }
 
-  return { tax, breakdown };
+  else {
+    let slabTax = 400000 * 0.05 + 400000 * 0.1 + 400000 * 0.15 + 400000 * 0.2 + 400000 * 0.25 +  (taxableIncome - 2400000) * 0.30;
+    tax = slabTax;
+    breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
+    breakdown.push({ slab: '₹8 L – ₹12 L', taxableIncome: 400000, rate: '10%', tax: '₹40000' });
+    breakdown.push({ slab: '₹12 L – ₹16 L', taxableIncome: 400000, rate: '15%', tax: '₹60000' });
+    breakdown.push({ slab: '₹16 L – ₹20 L', taxableIncome: 400000, rate: '20%', tax: '₹80000' });
+    breakdown.push({ slab: '₹20 L – ₹24 L', taxableIncome: 400000, rate: '25%', tax: '₹100000' });
+    breakdown.push({ slab: '₹24 L and above', taxableIncome: taxableIncome - 1250000, rate: '30%', tax: `₹${((taxableIncome - 2400000) * 0.30).toFixed(2)}` });
+  }
+
+  if(taxableIncome <= 700000){
+    if(tax <= 25000){
+      taxRebate = tax;
+    }
+  }
+
+  return { tax, breakdown, taxableIncome, taxRebate };
 }
 
 
@@ -85,7 +158,7 @@ function taxBreakup(...numbers) {
   let breakdown = [];
   breakdown.push({ index: '1', name: 'Gross Income', amount : `${numbers[0]}`, total: '' });
   breakdown.push({ index: '2', name: 'House rent allowances under section 10(13A)', amount : `${numbers[1]}`, total: '' });
-  let newIncome = (numbers[0]- numbers[1]).toFixed(2);
+  let newIncome = (numbers[0]- numbers[1]);
   breakdown.push({ index: '3', name: 'Total income after section 10 [1-2] ', amount : '', total: `${newIncome}` });
   
   breakdown.push({ index: '4', name: 'Standard Deduction under section 16(ia) ', amount : `${numbers[2]}`, total: '' });
@@ -108,7 +181,11 @@ function taxBreakup(...numbers) {
   newIncome = newIncome - numbers[6];
   breakdown.push({ index: '13', name: 'Total income after 24(A) [11-12] ', amount : '', total: `${newIncome}` });
   
- 
+  breakdown.push({ index: '14', name: 'Tax on Total Income ', amount : '', total: `${numbers[7].tax.toFixed(2)}` });
+
+  breakdown.push({ index: '15', name: 'Rebate section 87A ', amount : '', total: `${numbers[7].taxRebate.toFixed(2)}` });
+  
+  breakdown.push({ index: '15', name: 'Net Tax Payable ', amount : '', total: `${numbers[7].tax - numbers[7].taxRebate}` });
   return { breakdown };
 }
 
@@ -132,9 +209,7 @@ function calculateTax() {
     return;
   }
 
-  const taxBreakupResult =  taxBreakup(incomeOld, deductionHRA, 50000, deduction80c, deductionNPS, deductionHealth, interestHomeLoan)
-
-  console.log(taxBreakupResult);
+  
   const totalOldDeductions = deduction80c + deductionNPS + deductionHealth + deductionHRA + interestHomeLoan + 50000;
   const hraExemption = calculateHRAExemption(basicSalary, hraPaid, rentPaid);
 
@@ -143,8 +218,11 @@ function calculateTax() {
   const newTaxResults = calculateNewRegimeTax(incomeNew);
 
   // Display the results
-  document.getElementById('oldTax').textContent = oldTaxResults.tax.toFixed(2);
-  document.getElementById('newTax').textContent = newTaxResults.tax.toFixed(2);
+  document.getElementById('oldTax').textContent = (oldTaxResults.tax - oldTaxResults.taxRebate)  .toFixed(2);
+  document.getElementById('newTax').textContent = (newTaxResults.tax - newTaxResults.taxRebate)  .toFixed(2);
+
+  const taxBreakupResult =  taxBreakup(incomeOld, deductionHRA, 50000, deduction80c, deductionNPS, deductionHealth, interestHomeLoan, oldTaxResults)
+  console.log(taxBreakupResult);
 
   // Display HRA Exemption
   document.getElementById('hraExemption').textContent = `HRA Exemption: ₹${hraExemption.toFixed(2)}`;
@@ -188,6 +266,10 @@ function calculateTax() {
     oldBreakdown.innerHTML += row;
   });
 
+  oldBreakdown.innerHTML += `<tr>
+                              <td colspan="3">Total Tax</td>
+                              <td>₹${(oldTaxResults.tax - oldTaxResults.taxRebate)}</td>
+                            </tr>`;
 
   // Display Tax Breakdown for New Regime
   const newBreakdown = document.getElementById('newRegimeBreakdown');
@@ -201,6 +283,10 @@ function calculateTax() {
                 </tr>`;
     newBreakdown.innerHTML += row;
   });
+  newBreakdown.innerHTML += `<tr>
+                              <td colspan="3">Total Tax</td>
+                              <td>₹${(newTaxResults.tax - newTaxResults.taxRebate)}</td>
+                            </tr>`;
 
   // Calculate and display savings
   const savings = oldTaxResults.tax - newTaxResults.tax;
