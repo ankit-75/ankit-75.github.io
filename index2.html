@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Income Tax Calculator - India</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Basic styling for tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .results-container {
+      margin-top: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>India Income Tax Calculator</h1>
+      <p>Compare tax under Old vs. New Regime</p>
+    </header>
+
+    <main>
+      <div class="tax-sections">
+        <!-- Left Section (Old Tax Regime) -->
+        <section class="tax-regime old-regime">
+          <h2>Old Tax Regime</h2>
+          <form id="oldTaxForm">
+            <div class="form-group">
+              <label for="income">Annual Income (₹):</label>
+              <input type="number" id="income" name="income" required>
+            </div>
+            <div class="form-group">
+              <label for="deduction80c">Deduction 80C (₹):</label>
+              <input type="number" id="deduction80c" name="deduction80c" value="0">
+            </div>
+            <div class="form-group">
+              <label for="deductionNPS">NPS Deduction (₹):</label>
+              <input type="number" id="deductionNPS" name="deductionNPS" value="0">
+            </div>
+            <div class="form-group">
+              <label for="deductionHealth">Health Insurance Deduction (₹):</label>
+              <input type="number" id="deductionHealth" name="deductionHealth" value="0">
+            </div>
+            <div class="form-group">
+              <label for="deductionHRA">HRA Deduction (₹):</label>
+              <input type="number" id="deductionHRA" name="deductionHRA" value="0">
+            </div>
+          </form>
+
+          <!-- New HRA Calculation Section -->
+          <h3>HRA Calculation</h3>
+          <form id="hraForm">
+            <div class="form-group">
+              <label for="basicSalary">Basic Salary (₹):</label>
+              <input type="number" id="basicSalary" name="basicSalary" value="0">
+            </div>
+            <div class="form-group">
+              <label for="hraPaid">HRA Paid (₹):</label>
+              <input type="number" id="hraPaid" name="hraPaid" value="0">
+            </div>
+            <div class="form-group">
+              <label for="rentPaid">Rent Paid (₹):</label>
+              <input type="number" id="rentPaid" name="rentPaid" value="0">
+            </div>
+          </form>
+        </section>
+
+        <!-- Right Section (New Tax Regime) -->
+        <section class="tax-regime new-regime">
+          <h2>New Tax Regime</h2>
+          <form id="newTaxForm">
+            <div class="form-group">
+              <label for="incomeNew">Annual Income (₹):</label>
+              <input type="number" id="incomeNew" name="incomeNew" required>
+            </div>
+            <button type="button" onclick="calculateTax()">Calculate Tax</button>
+          </form>
+        </section>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-container">
+        <h2>Tax Comparison</h2>
+        <p><strong>Old Regime Tax:</strong> ₹<span id="oldTax">0</span></p>
+        <p><strong>New Regime Tax:</strong> ₹<span id="newTax">0</span></p>
+        <p id="savings" style="color: green; font-weight: bold;"></p>
+        <p id="hraExemption" style="color: blue; font-weight: bold;"></p>
+
+        <!-- Breakdown of the calculation -->
+        <div id="taxBreakdown">
+          <h3>Tax Calculation Breakdown</h3>
+          
+          <!-- Old Regime Tax Breakdown -->
+          <h4>Old Regime Tax Slabs</h4>
+          <table id="oldRegimeTable">
+            <thead>
+              <tr>
+                <th>Slab</th>
+                <th>Taxable Income (₹)</th>
+                <th>Tax Rate</th>
+                <th>Calculated Tax (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="oldRegimeBreakdown"></tbody>
+          </table>
+          
+          <!-- New Regime Tax Breakdown -->
+          <h4>New Regime Tax Slabs</h4>
+          <table id="newRegimeTable">
+            <thead>
+              <tr>
+                <th>Slab</th>
+                <th>Taxable Income (₹)</th>
+                <th>Tax Rate</th>
+                <th>Calculated Tax (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="newRegimeBreakdown"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Disclaimer: This is an estimate based on current tax laws.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Function to calculate the HRA Exemption
+    function calculateHRAExemption(basicSalary, hraPaid, rentPaid) {
+      const rentExemption = rentPaid - (0.4 * basicSalary);
+      return Math.min(hraPaid, rentPaid, rentExemption);
+    }
+
+    // Function to calculate the tax for Old Regime (including breakdown)
+    function calculateOldRegimeTax(income, deductions = 0, hraExemption = 0) {
+      let taxableIncome = income - deductions - hraExemption;
+      let tax = 0;
+      let breakdown = [];
+
+      // Tax Slabs for Old Regime
+      if (taxableIncome <= 250000) {
+        tax = 0;
+        breakdown.push({ slab: '₹0 – ₹2.5 L', taxableIncome: taxableIncome, rate: '0%', tax: '₹0' });
+      } else if (taxableIncome <= 500000) {
+        let slabTax = (taxableIncome - 250000) * 0.05;
+        tax = slabTax;
+        breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: taxableIncome - 250000, rate: '5%', tax: `₹${slabTax.toFixed(2)}` });
+      } else if (taxableIncome <= 1000000) {
+        let slabTax = 250000 * 0.05 + (taxableIncome - 500000) * 0.2;
+        tax = slabTax;
+        breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: 250000, rate: '5%', tax: '₹12500' });
+        breakdown.push({ slab: '₹5 L – ₹10 L', taxableIncome: taxableIncome - 500000, rate: '20%', tax: `₹${((taxableIncome - 500000) * 0.2).toFixed(2)}` });
+      } else {
+        let slabTax = 250000 * 0.05 + 500000 * 0.2 + (taxableIncome - 1000000) * 0.3;
+        tax = slabTax;
+        breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: 250000, rate: '5%', tax: '₹12500' });
+        breakdown.push({ slab: '₹5 L – ₹10 L', taxableIncome: 500000, rate: '20%', tax: '₹100000' });
+        breakdown.push({ slab: '₹10 L and above', taxableIncome: taxableIncome - 1000000, rate: '30%', tax: `₹${((taxableIncome - 1000000) * 0.3).toFixed(2)}` });
+      }
+
+      return { tax, breakdown };
+    }
+
+    // Function to calculate the tax for New Regime (including breakdown)
+    function calculateNewRegimeTax(income) {
+      let taxableIncome = income;
+      let tax = 0;
+      let breakdown = [];
+
+      // Tax Slabs for New Regime
+      if (taxableIncome <= 250000) {
+        tax = 0;
+        breakdown.push({ slab: '₹0 – ₹2.5 L', taxableIncome: taxableIncome, rate: '0%', tax: '₹0' });
+      } else if (taxableIncome <= 500000) {
+        let slabTax = (taxableIncome - 250000) * 0.05;
+        tax = slabTax;
+        breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: taxableIncome - 250000, rate: '5%', tax: `₹${slabTax.toFixed(2)}` });
+      } else if (taxableIncome <= 750000) {
+        let slabTax = 250000 * 0.05 + (taxableIncome - 500000) * 0.1;
+        tax = slabTax;
+        breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: 250000, rate: '5%', tax: '₹12500' });
+        breakdown.push({ slab: '₹5 L – ₹7.5 L', taxableIncome: taxableIncome - 500000, rate: '10%', tax: `₹${((taxableIncome - 500000) * 0.1).toFixed(2)}` });
+      } else {
+        let slabTax = 250000 * 0.05 + 250000 * 0.1 + (taxableIncome - 750000) * 0.15;
+        tax = slabTax;
+        breakdown.push({ slab: '₹2.5 L – ₹5 L', taxableIncome: 250000, rate: '5%', tax: '₹12500' });
+        breakdown.push({ slab: '₹5 L – ₹7.5 L', taxableIncome: 250000, rate: '10%', tax: '₹25000' });
+        breakdown.push({ slab: '₹7.5 L – ₹10 L', taxableIncome: taxableIncome - 750000, rate: '15%', tax: `₹${((taxableIncome - 750000) * 0.15).toFixed(2)}` });
+      }
+
+      return { tax, breakdown };
+    }
+
+    // Main function to calculate tax and display results
+    function calculateTax() {
+      const incomeOld = parseFloat(document.getElementById('income').value);
+      const incomeNew = parseFloat(document.getElementById('incomeNew').value);
+
+      const deduction80c = parseFloat(document.getElementById('deduction80c').value) || 0;
+      const deductionNPS = parseFloat(document.getElementById('deductionNPS').value) || 0;
+      const deductionHealth = parseFloat(document.getElementById('deductionHealth').value) || 0;
+      const deductionHRA = parseFloat(document.getElementById('deductionHRA').value) || 0;
+
+      const basicSalary = parseFloat(document.getElementById('basicSalary').value) || 0;
+      const hraPaid = parseFloat(document.getElementById('hraPaid').value) || 0;
+      const rentPaid = parseFloat(document.getElementById('rentPaid').value) || 0;
+
+      if (isNaN(incomeOld) || incomeOld <= 0 || isNaN(incomeNew) || incomeNew <= 0) {
+        alert('Please enter valid income!');
+        return;
+      }
+
+      const totalOldDeductions = deduction80c + deductionNPS + deductionHealth + deductionHRA;
+      const hraExemption = calculateHRAExemption(basicSalary, hraPaid, rentPaid);
+
+      // Calculate tax for both regimes
+      const oldTaxResults = calculateOldRegimeTax(incomeOld, totalOldDeductions, hraExemption);
+      const newTaxResults = calculateNewRegimeTax(incomeNew);
+
+      // Display the results
+      document.getElementById('oldTax').textContent = oldTaxResults.tax.toFixed(2);
+      document.getElementById('newTax').textContent = newTaxResults.tax.toFixed(2);
+
+      // Display HRA Exemption
+      document.getElementById('hraExemption').textContent = `HRA Exemption: ₹${hraExemption.toFixed(2)}`;
+
+      // Display Tax Breakdown for Old Regime
+      const oldBreakdown = document.getElementById('oldRegimeBreakdown');
+      oldBreakdown.innerHTML = '';
+      oldTaxResults.breakdown.forEach(item => {
+        const row = `<tr>
+                      <td>${item.slab}</td>
+                      <td>₹${item.taxableIncome}</td>
+                      <td>${item.rate}</td>
+                      <td>${item.tax}</td>
+                    </tr>`;
+        oldBreakdown.innerHTML += row;
+      });
+
+      // Display Tax Breakdown for New Regime
+      const newBreakdown = document.getElementById('newRegimeBreakdown');
+      newBreakdown.innerHTML = '';
+      newTaxResults.breakdown.forEach(item => {
+        const row = `<tr>
+                      <td>${item.slab}</td>
+                      <td>₹${item.taxableIncome}</td>
+                      <td>${item.rate}</td>
+                      <td>${item.tax}</td>
+                    </tr>`;
+        newBreakdown.innerHTML += row;
+      });
+
+      // Calculate and display savings
+      const savings = oldTaxResults.tax - newTaxResults.tax;
+      if (savings > 0) {
+        document.getElementById('savings').textContent = `You save ₹${savings.toFixed(2)} by choosing the New Tax Regime.`;
+      } else {
+        document.getElementById('savings').textContent = '';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -79,6 +79,39 @@ function calculateNewRegimeTax(income) {
   return { tax, breakdown };
 }
 
+
+// Function to calculate the tax for Old Regime (including breakdown)
+function taxBreakup(...numbers) {
+  let breakdown = [];
+  breakdown.push({ index: '1', name: 'Gross Income', amount : `${numbers[0]}`, total: '' });
+  breakdown.push({ index: '2', name: 'House rent allowances under section 10(13A)', amount : `${numbers[1]}`, total: '' });
+  let newIncome = (numbers[0]- numbers[1]).toFixed(2);
+  breakdown.push({ index: '3', name: 'Total income after section 10 [1-2] ', amount : '', total: `${newIncome}` });
+  
+  breakdown.push({ index: '4', name: 'Standard Deduction under section 16(ia) ', amount : `${numbers[2]}`, total: '' });
+  newIncome = newIncome - numbers[2];
+  breakdown.push({ index: '5', name: 'Total income after section 16 [3-4] ', amount : '', total: `${newIncome}` });
+  
+  breakdown.push({ index: '6', name: 'Deduction under section 80C', amount : `${numbers[3]}`, total: '' });
+  newIncome = newIncome - numbers[3];
+  breakdown.push({ index: '7', name: 'Total income after section 80C [5-6] ', amount : '', total: `${newIncome}` });
+  
+  breakdown.push({ index: '8', name: 'NPS under section 80CCD(1B)', amount : `${numbers[4]}`, total: '' });
+  newIncome = newIncome - numbers[4];
+  breakdown.push({ index: '9', name: 'Total income after 80CCD(1B) [7-8] ', amount : '', total: `${newIncome}` });
+  
+  breakdown.push({ index: '10', name: 'Health insurance premium section 80D', amount : `${numbers[5]}`, total: '' });
+  newIncome = newIncome - numbers[5];
+  breakdown.push({ index: '11', name: 'Total income after 80D(1B) [9-10] ', amount : '', total: `${newIncome}` });
+  
+  breakdown.push({ index: '12', name: 'Interest paid on Home loan section 24(A)', amount : `${numbers[6]}`, total: '' });
+  newIncome = newIncome - numbers[6];
+  breakdown.push({ index: '13', name: 'Total income after 24(A) [11-12] ', amount : '', total: `${newIncome}` });
+  
+ 
+  return { breakdown };
+}
+
 // Main function to calculate tax and display results
 function calculateTax() {
   const incomeOld = parseFloat(document.getElementById('income').value);
@@ -88,6 +121,7 @@ function calculateTax() {
   const deductionNPS = parseFloat(document.getElementById('deductionNPS').value) || 0;
   const deductionHealth = parseFloat(document.getElementById('deductionHealth').value) || 0;
   const deductionHRA = parseFloat(document.getElementById('deductionHRA').value) || 0;
+  const interestHomeLoan = parseFloat(document.getElementById('interestHomeLoan').value) || 0;
 
   const basicSalary = parseFloat(document.getElementById('basicSalary').value) || 0;
   const hraPaid = parseFloat(document.getElementById('hraPaid').value) || 0;
@@ -98,7 +132,10 @@ function calculateTax() {
     return;
   }
 
-  const totalOldDeductions = deduction80c + deductionNPS + deductionHealth + deductionHRA;
+  const taxBreakupResult =  taxBreakup(incomeOld, deductionHRA, 50000, deduction80c, deductionNPS, deductionHealth, interestHomeLoan)
+
+  console.log(taxBreakupResult);
+  const totalOldDeductions = deduction80c + deductionNPS + deductionHealth + deductionHRA + interestHomeLoan + 50000;
   const hraExemption = calculateHRAExemption(basicSalary, hraPaid, rentPaid);
 
   // Calculate tax for both regimes
@@ -112,6 +149,32 @@ function calculateTax() {
   // Display HRA Exemption
   document.getElementById('hraExemption').textContent = `HRA Exemption: ₹${hraExemption.toFixed(2)}`;
 
+
+  // Display Tax All Breakdown for Old Regime
+  const oldRegimeTaxBreakbownBody = document.getElementById('oldRegimeTaxBreakbownBody');
+  oldRegimeTaxBreakbownBody.innerHTML = '';
+  taxBreakupResult.breakdown.forEach(item => {
+    const row = `<tr>
+                  <td>${item.index}</td>
+                  <td>${item.name}</td>
+                  <td>${item.amount}</td>
+                  <td>${item.total}</td>
+                </tr>`;
+    oldRegimeTaxBreakbownBody.innerHTML += row;
+  });
+  // Display Tax Breakdown Head for Old Regime  
+  const headText = `<tr>
+                    <th>Slab</th>
+                    <th>Taxable Income (₹)</th>
+                    <th>Tax Rate</th>
+                    <th>Calculated Tax (₹)</th>
+                  </tr>`;
+  const oldRegimeBreakdownHead = document.getElementById('oldRegimeBreakdownHead');
+  oldRegimeBreakdownHead.innerHTML = headText;
+  const newRegimeBreakdownHead = document.getElementById('oldRegimeBreakdownHead');
+  newRegimeBreakdownHead.innerHTML = headText;
+
+
   // Display Tax Breakdown for Old Regime
   const oldBreakdown = document.getElementById('oldRegimeBreakdown');
   oldBreakdown.innerHTML = '';
@@ -124,6 +187,7 @@ function calculateTax() {
                 </tr>`;
     oldBreakdown.innerHTML += row;
   });
+
 
   // Display Tax Breakdown for New Regime
   const newBreakdown = document.getElementById('newRegimeBreakdown');

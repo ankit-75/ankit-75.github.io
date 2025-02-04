@@ -21,29 +21,38 @@
           <form id="oldTaxForm">
             <div class="form-group">
               <label for="income">Annual Income (₹):</label>
-              <input type="number" id="income" name="income" value="800000" required>
+              <input type="number" id="income" name="income" value="1500000" required>
             </div>
+            <div class="form-group">
+                <label for="deductionHRA">HRA Exemption Section 10(13A) (₹):</label>
+                <input type="number" id="deductionHRA" name="deductionHRA" value="200000">
+              </div>
             <div class="form-group">
               <label for="deduction80c">Deduction 80C (₹):</label>
               <input type="number" id="deduction80c" name="deduction80c" value="150000">
             </div>
             <div class="form-group">
-              <label for="deductionNPS">NPS Deduction (₹):</label>
+              <label for="deductionNPS">NPS Deduction Section 80CCD(1B) (₹):</label>
               <input type="number" id="deductionNPS" name="deductionNPS" value="50000">
             </div>
             <div class="form-group">
-              <label for="deductionHealth">Health Insurance Deduction (₹):</label>
+              <label for="deductionHealth">Health Insurance Section 80D (₹):</label>
               <input type="number" id="deductionHealth" name="deductionHealth" value="25000">
             </div>
             <div class="form-group">
-              <label for="deductionHRA">HRA Deduction (₹):</label>
-              <input type="number" id="deductionHRA" name="deductionHRA" value="200000">
-            </div>
+                <label for="interestHomeLoan">Interest Paid on Home Loan Section 24(B) (₹):</label>
+                <input type="number" id="interestHomeLoan" name="interestHomeLoan" value="200000">
+              </div>
             <button type="button" onclick="calculateTax()">Calculate Tax</button>
           </form>
 
-          <!-- New HRA Calculation Section -->
-          <h3>HRA Calculation</h3>
+          
+        </section>
+
+        <!-- Right Section (New Tax Regime) -->
+        <section class="tax-regime new-regime">
+            <!-- New HRA Calculation Section -->
+          <h2>HRA Calculation</h2>
           <form id="hraForm">
             <div class="form-group">
               <label for="basicSalary">Basic Salary (₹):</label>
@@ -58,15 +67,11 @@
               <input type="number" id="rentPaid" name="rentPaid" value="0">
             </div>
           </form>
-        </section>
-
-        <!-- Right Section (New Tax Regime) -->
-        <section class="tax-regime new-regime">
           <h2>New Tax Regime</h2>
           <form id="newTaxForm">
             <div class="form-group">
               <label for="incomeNew">Annual Income (₹):</label>
-              <input type="number" id="incomeNew" name="incomeNew" value="800000" required>
+              <input type="number" id="incomeNew" name="incomeNew" value="1500000" required>
             </div>
             <button type="button" onclick="calculateTax()">Calculate Tax</button>
           </form>
@@ -84,17 +89,20 @@
         <!-- Breakdown of the calculation -->
         <div id="taxBreakdown">
           <h3>Tax Calculation Breakdown</h3>
-          
+          <table id="oldRegimeTaxBreakbownTable">
+            <tbody id="oldRegimeTaxBreakbownBody"></tbody>
+          </table>
+
           <!-- Old Regime Tax Breakdown -->
           <h4>Old Regime Tax Slabs</h4>
           <table id="oldRegimeTable">
-            <thead>
-              <tr>
+            <thead id="oldRegimeBreakdownHead">
+              <!-- <tr>
                 <th>Slab</th>
                 <th>Taxable Income (₹)</th>
                 <th>Tax Rate</th>
                 <th>Calculated Tax (₹)</th>
-              </tr>
+              </tr> -->
             </thead>
             <tbody id="oldRegimeBreakdown"></tbody>
           </table>
@@ -102,13 +110,13 @@
           <!-- New Regime Tax Breakdown -->
           <h4>New Regime Tax Slabs</h4>
           <table id="newRegimeTable">
-            <thead>
-              <tr>
+            <thead id="newRegimeBreakdownHead">
+              <!-- <tr>
                 <th>Slab</th>
                 <th>Taxable Income (₹)</th>
                 <th>Tax Rate</th>
                 <th>Calculated Tax (₹)</th>
-              </tr>
+              </tr> -->
             </thead>
             <tbody id="newRegimeBreakdown"></tbody>
           </table>
