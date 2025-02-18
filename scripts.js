@@ -1,5 +1,8 @@
 // Function to calculate the HRA Exemption
-function calculateHRAExemption(basicSalary, hraPaid, rentPaid) {
+function calculateHRAExemption() {
+  const basicSalary = parseFloat(document.getElementById('basicSalary').value) || 0;
+  const hraPaid = parseFloat(document.getElementById('hraPaid').value) || 0;
+  const rentPaid = parseFloat(document.getElementById('rentPaid').value) || 0;
   const rentExemption = rentPaid - (0.4 * basicSalary);
   return Math.min(hraPaid, rentPaid, rentExemption);
 }
@@ -10,6 +13,8 @@ function calculateOldRegimeTax(income, deductions = 0, hraExemption = 0) {
   let tax = 0;
   let breakdown = [];
   let taxRebate = 0;
+  let marginalRelief = 0;
+  let taxPayable = 0;
   // Tax Slabs for Old Regime
   if (taxableIncome <= 250000) {
     tax = 0;
@@ -34,9 +39,22 @@ function calculateOldRegimeTax(income, deductions = 0, hraExemption = 0) {
   if(taxableIncome <= 500000){
     if(tax <= 12500){
       taxRebate = tax;
+    }else{
+      taxPayable = tax;
+    }
+  }else{
+    // calculate marginal relief
+    let marginaIncome = taxableIncome - 500000;
+    let minTax = Math.min(marginaIncome, tax);
+   
+    if(minTax == marginaIncome){
+      marginalRelief = tax - marginaIncome;
+      taxPayable = minTax;
+    }else{
+      taxPayable = tax;
     }
   }
-  return { tax, breakdown, taxableIncome, taxRebate };
+  return { tax, breakdown, taxableIncome, taxRebate, marginalRelief, taxPayable };
 }
 
 // Function to calculate the tax for New Regime
@@ -45,6 +63,8 @@ function calculateNewRegimeTax(income) {
   let tax = 0;
   let breakdown = [];
   let taxRebate = 0;
+  let marginalRelief = 0;
+  let taxPayable = 0;
   // Tax Slabs for New Regime
   if (taxableIncome <= 300000) {
     tax = 0;
@@ -64,7 +84,7 @@ function calculateNewRegimeTax(income) {
     breakdown.push({ slab: '₹3 L – ₹7 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
     breakdown.push({ slab: '₹7 L – ₹10 L', taxableIncome: 300000, rate: '10%', tax: '₹30000' });
     breakdown.push({ slab: '₹10 L – ₹12 L', taxableIncome: taxableIncome - 1000000, rate: '15%', tax: `₹${((taxableIncome - 1000000) * 0.15).toFixed(2)}` });
-  } else if (taxableIncome <= 150000) {
+  } else if (taxableIncome <= 1500000) {
     let slabTax = 400000 * 0.05 + 300000 * 0.1 + 200000 * 0.15 + (taxableIncome - 1200000) * 0.2;
     tax = slabTax;
     breakdown.push({ slab: '₹3 L – ₹7 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
@@ -84,18 +104,33 @@ function calculateNewRegimeTax(income) {
   if(taxableIncome <= 700000){
     if(tax <= 25000){
       taxRebate = tax;
+    }else{
+      taxPayable = tax;
+    }
+  } else{
+    // calculate marginal relief
+    let marginaIncome = taxableIncome - 700000;
+    let minTax = Math.min(marginaIncome, tax);
+   
+    if(minTax == marginaIncome){
+      marginalRelief = tax - marginaIncome;
+      taxPayable = minTax;
+    }else{
+      taxPayable = tax;
     }
   }
 
-  return { tax, breakdown, taxableIncome, taxRebate };
+  return { tax, breakdown, taxableIncome, taxRebate, marginalRelief, taxPayable };
 }
 
 // Function to calculate the tax for New Regime
 function calculateNewRegimeTax2025_26(income) {
-  let taxableIncome = income;
+  let taxableIncome = income - 75000;
   let tax = 0;
   let breakdown = [];
   let taxRebate = 0;
+  let marginalRelief = 0;
+  let taxPayable = 0;
   // Tax Slabs for New Regime
   if (taxableIncome <= 400000) {
     tax = 0;
@@ -104,7 +139,7 @@ function calculateNewRegimeTax2025_26(income) {
     let slabTax = (taxableIncome - 400000) * 0.05;
     tax = slabTax;
     breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: taxableIncome - 400000, rate: '5%', tax: `₹${slabTax.toFixed(2)}` });
-  } else if (taxableIncome <= 120000) {
+  } else if (taxableIncome <= 1200000) {
     let slabTax = 400000 * 0.05 + (taxableIncome - 800000) * 0.1;
     tax = slabTax;
     breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
@@ -115,14 +150,14 @@ function calculateNewRegimeTax2025_26(income) {
     breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
     breakdown.push({ slab: '₹8 L – ₹12 L', taxableIncome: 400000, rate: '10%', tax: '₹40000' });
     breakdown.push({ slab: '₹12 L – ₹16 L', taxableIncome: taxableIncome - 1200000, rate: '15%', tax: `₹${((taxableIncome - 1200000) * 0.15).toFixed(2)}` });
-  } else if (taxableIncome <= 200000) {
+  } else if (taxableIncome <= 2000000) {
     let slabTax = 400000 * 0.05 + 400000 * 0.1 + 400000 * 0.15 + (taxableIncome - 1600000) * 0.2;
     tax = slabTax;
     breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
     breakdown.push({ slab: '₹8 L – ₹12 L', taxableIncome: 400000, rate: '10%', tax: '₹40000' });
     breakdown.push({ slab: '₹12 L – ₹16 L', taxableIncome: 400000, rate: '15%', tax: '₹60000' });
     breakdown.push({ slab: '₹10 L – ₹12.5 L', taxableIncome: taxableIncome - 1600000, rate: '20%', tax: `₹${((taxableIncome - 1600000) * 0.2).toFixed(2)}` });
-  } else if (taxableIncome <= 240000){
+  } else if (taxableIncome <= 2400000){
     let slabTax = 400000 * 0.05 + 400000 * 0.1 + 400000 * 0.15 + 400000 * 0.2 + (taxableIncome - 200000) * 0.25;
     tax = slabTax;
     breakdown.push({ slab: '₹4 L – ₹8 L', taxableIncome: 400000, rate: '5%', tax: '₹20000' });
@@ -143,13 +178,25 @@ function calculateNewRegimeTax2025_26(income) {
     breakdown.push({ slab: '₹24 L and above', taxableIncome: taxableIncome - 1250000, rate: '30%', tax: `₹${((taxableIncome - 2400000) * 0.30).toFixed(2)}` });
   }
 
-  if(taxableIncome <= 700000){
-    if(tax <= 25000){
+  if(taxableIncome <= 1200000){
+    if(tax <= 60000){
       taxRebate = tax;
+    }else{
+      taxPayable = tax;
+    }
+  }else{
+    // calculate marginal relief
+    let marginaIncome = taxableIncome - 1200000;
+    let minTax = Math.min(marginaIncome, tax);
+    if(minTax == marginaIncome){
+      marginalRelief = tax - marginaIncome;
+      taxPayable = minTax;
+    }else{
+      taxPayable = tax;
     }
   }
 
-  return { tax, breakdown, taxableIncome, taxRebate };
+  return { tax, breakdown, taxableIncome, taxRebate, marginalRelief, taxPayable };
 }
 
 
@@ -183,26 +230,48 @@ function taxBreakup(...numbers) {
   
   breakdown.push({ index: '14', name: 'Tax on Total Income ', amount : '', total: `${numbers[7].tax.toFixed(2)}` });
 
-  breakdown.push({ index: '15', name: 'Rebate section 87A ', amount : '', total: `${numbers[7].taxRebate.toFixed(2)}` });
+  breakdown.push({ index: '15', name: 'Rebate section 87A (if applicable )', amount : '', total: `${numbers[7].taxRebate.toFixed(2)}` });
   
-  breakdown.push({ index: '15', name: 'Net Tax Payable ', amount : '', total: `${numbers[7].tax - numbers[7].taxRebate}` });
+  breakdown.push({ index: '6', name: 'Marginal Relief  (if applicable )', amount : '', total: `${numbers[7].marginalRelief.toFixed(2)}` });
+  
+
+  breakdown.push({ index: '15', name: 'Net Tax Payable (excluding cess)', amount : '', total: `${numbers[7].taxPayable}` });
+  return { breakdown };
+}
+
+// Function to calculate the tax for Old Regime (including breakdown)
+function taxBreakupNew(...numbers) {
+  let breakdown = [];
+  breakdown.push({ index: '1', name: 'Gross Income', amount : `${numbers[0]}`, total: '' });
+ 
+  breakdown.push({ index: '2', name: 'Standard Deduction under section 16(ia) ', amount : `${numbers[1]}`, total: '' });
+  let newIncome = (numbers[0]- numbers[1]);
+  breakdown.push({ index: '3', name: 'Total income after section 16 [3-4] ', amount : '', total: `${newIncome}` });
+  
+  
+  breakdown.push({ index: '4', name: 'Tax on Total Income ', amount : '', total: `${numbers[2].tax.toFixed(2)}` });
+
+  breakdown.push({ index: '5', name: 'Rebate section 87A (if applicable )', amount : '', total: `${numbers[2].taxRebate.toFixed(2)}` });
+  
+  breakdown.push({ index: '6', name: 'Marginal Relief  (if applicable )', amount : '', total: `${numbers[2].marginalRelief.toFixed(2)}` });
+  
+
+  breakdown.push({ index: '7', name: 'Net Tax Payable (excluding cess)', amount : '', total: `${numbers[2].taxPayable.toFixed(2)}` });
   return { breakdown };
 }
 
 // Main function to calculate tax and display results
 function calculateTax() {
   const incomeOld = parseFloat(document.getElementById('income').value);
-  const incomeNew = parseFloat(document.getElementById('incomeNew').value);
+  const incomeNew = parseFloat(document.getElementById('income').value);
   
   const deduction80c = parseFloat(document.getElementById('deduction80c').value) || 0;
   const deductionNPS = parseFloat(document.getElementById('deductionNPS').value) || 0;
   const deductionHealth = parseFloat(document.getElementById('deductionHealth').value) || 0;
   const deductionHRA = parseFloat(document.getElementById('deductionHRA').value) || 0;
   const interestHomeLoan = parseFloat(document.getElementById('interestHomeLoan').value) || 0;
-
-  const basicSalary = parseFloat(document.getElementById('basicSalary').value) || 0;
-  const hraPaid = parseFloat(document.getElementById('hraPaid').value) || 0;
-  const rentPaid = parseFloat(document.getElementById('rentPaid').value) || 0;
+  const financialYear = parseFloat(document.getElementById('financialYear').value);
+  console.log(financialYear);
 
   if (isNaN(incomeOld) || incomeOld <= 0 || isNaN(incomeNew) || incomeNew <= 0) {
     alert('Please enter valid income!');
@@ -211,21 +280,24 @@ function calculateTax() {
 
   
   const totalOldDeductions = deduction80c + deductionNPS + deductionHealth + deductionHRA + interestHomeLoan + 50000;
-  const hraExemption = calculateHRAExemption(basicSalary, hraPaid, rentPaid);
+  const hraExemption = 0; // calculateHRAExemption();
 
   // Calculate tax for both regimes
   const oldTaxResults = calculateOldRegimeTax(incomeOld, totalOldDeductions, hraExemption);
-  const newTaxResults = calculateNewRegimeTax(incomeNew);
+  const newTaxResults = financialYear == 2024 ? calculateNewRegimeTax(incomeNew) : calculateNewRegimeTax2025_26(incomeNew);
 
   // Display the results
-  document.getElementById('oldTax').textContent = (oldTaxResults.tax - oldTaxResults.taxRebate)  .toFixed(2);
-  document.getElementById('newTax').textContent = (newTaxResults.tax - newTaxResults.taxRebate)  .toFixed(2);
+  document.getElementById('oldTax').textContent = (oldTaxResults.taxPayable)  .toFixed(2);
+  document.getElementById('newTax').textContent = (newTaxResults.taxPayable)  .toFixed(2);
 
   const taxBreakupResult =  taxBreakup(incomeOld, deductionHRA, 50000, deduction80c, deductionNPS, deductionHealth, interestHomeLoan, oldTaxResults)
   console.log(taxBreakupResult);
 
+  const taxBreakupResultNew =  taxBreakupNew(incomeNew, 75000,  newTaxResults)
+  console.log(taxBreakupResultNew);
+
   // Display HRA Exemption
-  document.getElementById('hraExemption').textContent = `HRA Exemption: ₹${hraExemption.toFixed(2)}`;
+  //document.getElementById('hraExemption').textContent = `HRA Exemption: ₹${hraExemption.toFixed(2)}`;
 
 
   // Display Tax All Breakdown for Old Regime
@@ -240,7 +312,8 @@ function calculateTax() {
                 </tr>`;
     oldRegimeTaxBreakbownBody.innerHTML += row;
   });
-  // Display Tax Breakdown Head for Old Regime  
+
+  // Display Tax Regiem Head for Old Regime  
   const headText = `<tr>
                     <th>Slab</th>
                     <th>Taxable Income (₹)</th>
@@ -249,8 +322,7 @@ function calculateTax() {
                   </tr>`;
   const oldRegimeBreakdownHead = document.getElementById('oldRegimeBreakdownHead');
   oldRegimeBreakdownHead.innerHTML = headText;
-  const newRegimeBreakdownHead = document.getElementById('oldRegimeBreakdownHead');
-  newRegimeBreakdownHead.innerHTML = headText;
+  
 
 
   // Display Tax Breakdown for Old Regime
@@ -271,6 +343,24 @@ function calculateTax() {
                               <td>₹${(oldTaxResults.tax - oldTaxResults.taxRebate)}</td>
                             </tr>`;
 
+
+// Display Tax All Breakdown for New Regime
+const newRegimeTaxBreakbownBody = document.getElementById('newRegimeTaxBreakbownBody');
+newRegimeTaxBreakbownBody.innerHTML = '';
+taxBreakupResultNew.breakdown.forEach(item => {
+  const row = `<tr>
+                <td>${item.index}</td>
+                <td>${item.name}</td>
+                <td>${item.amount}</td>
+                <td>${item.total}</td>
+              </tr>`;
+              newRegimeTaxBreakbownBody.innerHTML += row;
+});
+
+  // Display Tax Regiem Head for New Regime  
+  const newRegimeBreakdownHead = document.getElementById('newRegimeBreakdownHead');
+  newRegimeBreakdownHead.innerHTML = headText;
+
   // Display Tax Breakdown for New Regime
   const newBreakdown = document.getElementById('newRegimeBreakdown');
   newBreakdown.innerHTML = '';
@@ -289,10 +379,10 @@ function calculateTax() {
                             </tr>`;
 
   // Calculate and display savings
-  const savings = oldTaxResults.tax - newTaxResults.tax;
+  const savings = oldTaxResults.taxPayable - newTaxResults.taxPayable;
   if (savings > 0) {
     document.getElementById('savings').textContent = `You save ₹${savings.toFixed(2)} by choosing the New Tax Regime.`;
   } else {
-    document.getElementById('savings').textContent = '';
+    document.getElementById('savings').textContent = `You save ₹${ (-savings).toFixed(2)} by choosing the Old Tax Regime.`;
   }
 }
