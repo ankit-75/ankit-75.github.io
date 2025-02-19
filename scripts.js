@@ -294,6 +294,20 @@ function calculateTax() {
   const taxBreakupResultNew =  taxBreakupNew(incomeNew, 75000,  newTaxResults)
 
 
+
+  const oldTaxCalculation = document.getElementById("oldTaxCalculation");
+  oldTaxCalculation.innerHTML = 'Old Regime Tax Calculation Breakdown';
+
+  const oldSlabCalculation = document.getElementById("oldSlabCalculation");
+  oldSlabCalculation.innerHTML = 'Tax Slabs Calculation';
+
+  const newTaxCalculation = document.getElementById("newTaxCalculation");
+  newTaxCalculation.innerHTML = 'New Regime Tax Calculation Breakdown';
+
+  const newSlabCalculation = document.getElementById("newSlabCalculation");
+  newSlabCalculation.innerHTML = 'Tax Slabs Calculation';
+
+
   // Display HRA Exemption
   //document.getElementById('hraExemption').textContent = `HRA Exemption: ₹${hraExemption.toFixed(2)}`;
 

@@ -59,30 +59,7 @@
 
         <!-- Right Section (New Tax Regime) -->
         <section class="tax-regime new-regime">
-            <!-- New HRA Calculation Section -->
-          <!-- <h2>HRA Calculation</h2>
-          <form id="hraForm">
-            <div class="form-group">
-              <label for="basicSalary">Basic Salary (₹):</label>
-              <input type="number" id="basicSalary" name="basicSalary" value="0">
-            </div>
-            <div class="form-group">
-              <label for="hraPaid">HRA Paid (₹):</label>
-              <input type="number" id="hraPaid" name="hraPaid" value="0">
-            </div>
-            <div class="form-group">
-              <label for="rentPaid">Rent Paid (₹):</label>
-              <input type="number" id="rentPaid" name="rentPaid" value="0">
-            </div>
-          </form> -->
-          <!-- <h2>New Tax Regime</h2>
-          <form id="newTaxForm">
-            <div class="form-group">
-              <label for="incomeNew">Annual Income (₹):</label>
-              <input type="number" id="incomeNew" name="incomeNew" value="1500000" required>
-            </div>
-            <button type="button" onclick="calculateTax()">Calculate Tax</button>
-          </form> -->
+
         </section>
       </div>
       <br>
@@ -103,26 +80,26 @@
       </div>
       <div class="results-container">
         <div id="taxBreakdown">
-            <h3>Tax Calculation Breakdown</h3>
+            <h3 id="oldTaxCalculation"></h3>
             <table id="oldRegimeTaxBreakbownTable">
               <tbody id="oldRegimeTaxBreakbownBody"></tbody>
             </table>
   
             <!-- Old Regime Tax Breakdown -->
-            <h4>Old Regime Tax Slabs</h4>
+            <h4 id="oldSlabCalculation"></h4>
             <table id="oldRegimeTable">
               <thead id="oldRegimeBreakdownHead">
               
               </thead>
               <tbody id="oldRegimeBreakdown"></tbody>
             </table>
-            <br>
-            <h3>Tax Calculation Breakdown</h3>
+            
+            <h3 id="newTaxCalculation"></h3>
             <table id="newRegimeTaxBreakbownTable">
               <tbody id="newRegimeTaxBreakbownBody"></tbody>
             </table>
             <!-- New Regime Tax Breakdown -->
-            <h4>New Regime Tax Slabs</h4>
+            <h4 id="newSlabCalculation"></h4>
             <table id="newRegimeTable">
               <thead id="newRegimeBreakdownHead">
                
