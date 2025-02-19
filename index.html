@@ -33,7 +33,7 @@
                 <input type="number" id="deductionHRA" name="deductionHRA" min="0"   >
               </div>
             <div class="form-group">
-              <label for="deduction80c">Deduction 80C (₹):</label>
+              <label for="deduction80c">Deduction under 80C (₹):</label>
               <input type="number" id="deduction80c" name="deduction80c" min="0" max="150000" >
             </div>
             <div class="form-group">
@@ -73,8 +73,8 @@
             <h2>Tax Comparison</h2>
             <p><strong>Old Regime Tax:</strong> ₹<span id="oldTax">0</span></p>
             <p><strong>New Regime Tax:</strong> ₹<span id="newTax">0</span></p>
-            <p id="savings" style="color: green; font-weight: bold;"></p>
-            <p id="hraExemption" style="color: blue; font-weight: bold;"></p>
+           
+           
         </section>
         <section class="tax-regime">
             <div class="svg" id="svg" style="z-index:1"></div>
@@ -84,6 +84,7 @@
       </div>
       <div class="results-container">
         <div id="taxBreakdown">
+            <p id="savings" style="color: green; font-weight: bold;"></p>
             <h3 id="oldTaxCalculation"></h3>
             <table id="oldRegimeTaxBreakbownTable">
               <tbody id="oldRegimeTaxBreakbownBody"></tbody>
