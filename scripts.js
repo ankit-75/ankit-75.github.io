@@ -272,8 +272,8 @@ function calculateTax() {
   const interestHomeLoan = parseFloat(document.getElementById('interestHomeLoan').value) || 0;
   const financialYear = parseFloat(document.getElementById('financialYear').value);
 
-  if (isNaN(incomeOld) || incomeOld <= 0 || isNaN(incomeNew) || incomeNew <= 0) {
-    alert('Please enter valid income!');
+  if (isNaN(incomeOld) || incomeOld < 250000 || isNaN(incomeNew) || incomeNew <= 0) {
+    alert('Please enter valid income! (greater than 250000)');
     return;
   }
 
@@ -406,6 +406,10 @@ taxBreakupResultNew.breakdown.forEach(item => {
   if (savings > 0) {
     document.getElementById('savings').textContent = `You save ₹${savings.toFixed(2)} by choosing the New Tax Regime.`;
   } else {
-    document.getElementById('savings').textContent = `You save ₹${ (-savings).toFixed(2)} by choosing the Old Tax Regime.`;
+    let text = `You save ₹${ (-savings).toFixed(2)} by choosing the Old Tax Regime.`;
+    if(parseInt(savings) == 0){
+        text = `You can choose any tax regime.`
+    }
+    document.getElementById('savings').textContent = text
   }
 }

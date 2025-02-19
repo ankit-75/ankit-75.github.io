@@ -46,6 +46,15 @@ h1 {
   margin-bottom: 20px;
 }
 
+#newTaxForm{
+  margin-top: 60px;
+}
+
+.required:after {
+  content:" *";
+  color: red;
+}
+
 form {
   display: flex;
   flex-direction: column;
