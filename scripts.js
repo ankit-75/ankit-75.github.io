@@ -271,7 +271,6 @@ function calculateTax() {
   const deductionHRA = parseFloat(document.getElementById('deductionHRA').value) || 0;
   const interestHomeLoan = parseFloat(document.getElementById('interestHomeLoan').value) || 0;
   const financialYear = parseFloat(document.getElementById('financialYear').value);
-  console.log(financialYear);
 
   if (isNaN(incomeOld) || incomeOld <= 0 || isNaN(incomeNew) || incomeNew <= 0) {
     alert('Please enter valid income!');
@@ -291,14 +290,22 @@ function calculateTax() {
   document.getElementById('newTax').textContent = (newTaxResults.taxPayable)  .toFixed(2);
 
   const taxBreakupResult =  taxBreakup(incomeOld, deductionHRA, 50000, deduction80c, deductionNPS, deductionHealth, interestHomeLoan, oldTaxResults)
-  console.log(taxBreakupResult);
 
   const taxBreakupResultNew =  taxBreakupNew(incomeNew, 75000,  newTaxResults)
-  console.log(taxBreakupResultNew);
+
 
   // Display HRA Exemption
   //document.getElementById('hraExemption').textContent = `HRA Exemption: ₹${hraExemption.toFixed(2)}`;
 
+  const svgContainer = document.getElementById("svg");
+  svgContainer.innerHTML = '';
+  const animItem = bodymovin.loadAnimation({
+    wrapper: svgContainer,
+    animType: "svg",
+    loop: false,
+    autoplay: true,
+    path: "https://assets2.lottiefiles.com/packages/lf20_u4yrau.json"
+  });
 
   // Display Tax All Breakdown for Old Regime
   const oldRegimeTaxBreakbownBody = document.getElementById('oldRegimeTaxBreakbownBody');
@@ -378,6 +385,8 @@ taxBreakupResultNew.breakdown.forEach(item => {
                               <td>₹${(newTaxResults.tax - newTaxResults.taxRebate)}</td>
                             </tr>`;
 
+
+//path: "https://assets2.lottiefiles.com/packages/lf20_u4yrau.json"
   // Calculate and display savings
   const savings = oldTaxResults.taxPayable - newTaxResults.taxPayable;
   if (savings > 0) {

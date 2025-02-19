@@ -8,6 +8,7 @@
 </head>
 <body>
   <div class="container">
+    
     <header>
       <h1>India Income Tax Calculator</h1>
       <p>Compare tax under Old vs. New Regime</p>
@@ -84,44 +85,51 @@
           </form> -->
         </section>
       </div>
-
+      <br>
       <!-- Results Section -->
-      <div class="results-container">
-        <h2>Tax Comparison</h2>
-        <p><strong>Old Regime Tax:</strong> ₹<span id="oldTax">0</span></p>
-        <p><strong>New Regime Tax:</strong> ₹<span id="newTax">0</span></p>
-        <p id="savings" style="color: green; font-weight: bold;"></p>
-        <p id="hraExemption" style="color: blue; font-weight: bold;"></p>
-
+      <div class="tax-sections">
+        <section class="tax-regime" style="height: 200px;">
+            <h2>Tax Comparison</h2>
+            <p><strong>Old Regime Tax:</strong> ₹<span id="oldTax">0</span></p>
+            <p><strong>New Regime Tax:</strong> ₹<span id="newTax">0</span></p>
+            <p id="savings" style="color: green; font-weight: bold;"></p>
+            <p id="hraExemption" style="color: blue; font-weight: bold;"></p>
+        </section>
+        <section class="tax-regime">
+            <div class="svg" id="svg" style="z-index:1"></div>
+        </section>
         <!-- Breakdown of the calculation -->
+       
+      </div>
+      <div class="results-container">
         <div id="taxBreakdown">
-          <h3>Tax Calculation Breakdown</h3>
-          <table id="oldRegimeTaxBreakbownTable">
-            <tbody id="oldRegimeTaxBreakbownBody"></tbody>
-          </table>
-
-          <!-- Old Regime Tax Breakdown -->
-          <h4>Old Regime Tax Slabs</h4>
-          <table id="oldRegimeTable">
-            <thead id="oldRegimeBreakdownHead">
-            
-            </thead>
-            <tbody id="oldRegimeBreakdown"></tbody>
-          </table>
-          
-          <h3>Tax Calculation Breakdown</h3>
-          <table id="newRegimeTaxBreakbownTable">
-            <tbody id="newRegimeTaxBreakbownBody"></tbody>
-          </table>
-          <!-- New Regime Tax Breakdown -->
-          <h4>New Regime Tax Slabs</h4>
-          <table id="newRegimeTable">
-            <thead id="newRegimeBreakdownHead">
-             
-            </thead>
-            <tbody id="newRegimeBreakdown"></tbody>
-          </table>
-        </div>
+            <h3>Tax Calculation Breakdown</h3>
+            <table id="oldRegimeTaxBreakbownTable">
+              <tbody id="oldRegimeTaxBreakbownBody"></tbody>
+            </table>
+  
+            <!-- Old Regime Tax Breakdown -->
+            <h4>Old Regime Tax Slabs</h4>
+            <table id="oldRegimeTable">
+              <thead id="oldRegimeBreakdownHead">
+              
+              </thead>
+              <tbody id="oldRegimeBreakdown"></tbody>
+            </table>
+            <br>
+            <h3>Tax Calculation Breakdown</h3>
+            <table id="newRegimeTaxBreakbownTable">
+              <tbody id="newRegimeTaxBreakbownBody"></tbody>
+            </table>
+            <!-- New Regime Tax Breakdown -->
+            <h4>New Regime Tax Slabs</h4>
+            <table id="newRegimeTable">
+              <thead id="newRegimeBreakdownHead">
+               
+              </thead>
+              <tbody id="newRegimeBreakdown"></tbody>
+            </table>
+          </div>
       </div>
     </main>
 
@@ -130,5 +138,7 @@
     </footer>
   </div>
   <script src="scripts.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js" integrity="sha512-jEnuDt6jfecCjthQAJ+ed0MTVA++5ZKmlUcmDGBv2vUI/REn6FuIdixLNnQT+vKusE2hhTk2is3cFvv5wA+Sgg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+  <script src="lottie.min.js"></script>
 </body>
 </html>
