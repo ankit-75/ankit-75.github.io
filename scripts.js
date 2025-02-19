@@ -318,7 +318,7 @@ function calculateTax() {
     animType: "svg",
     loop: false,
     autoplay: true,
-    path: "https://assets2.lottiefiles.com/packages/lf20_u4yrau.json"
+    path: "https://ankit-75.github.io/data.json"
   });
 
   // Display Tax All Breakdown for Old Regime
